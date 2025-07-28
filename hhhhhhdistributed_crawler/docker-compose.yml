@@ -1,0 +1,126 @@
+version: '3.8'
+
+services:
+  # Redis服务
+  redis:
+    image: redis:7-alpine
+    container_name: crawler_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    restart: unless-stopped
+    networks:
+      - crawler_network
+
+  # Web API服务
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: crawler_api
+    ports:
+      - "5000:5000"
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - LOG_LEVEL=INFO
+    depends_on:
+      - redis
+    restart: unless-stopped
+    networks:
+      - crawler_network
+    command: python api/app.py
+
+  # 工作节点1
+  worker1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: crawler_worker1
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - LOG_LEVEL=INFO
+      - MAX_WORKERS=2
+    depends_on:
+      - redis
+    restart: unless-stopped
+    networks:
+      - crawler_network
+    command: python worker.py --mode worker
+
+  # 工作节点2
+  worker2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: crawler_worker2
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - LOG_LEVEL=INFO
+      - MAX_WORKERS=2
+    depends_on:
+      - redis
+    restart: unless-stopped
+    networks:
+      - crawler_network
+    command: python worker.py --mode worker
+
+  # 任务监控
+  monitor:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: crawler_monitor
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - LOG_LEVEL=INFO
+    depends_on:
+      - redis
+    restart: unless-stopped
+    networks:
+      - crawler_network
+    command: python worker.py --mode monitor
+
+  # 定时任务调度器
+  beat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: crawler_beat
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - LOG_LEVEL=INFO
+    depends_on:
+      - redis
+    restart: unless-stopped
+    networks:
+      - crawler_network
+    command: python worker.py --mode beat
+
+  # Flower监控界面 (可选)
+  flower:
+    image: mher/flower:1.0
+    container_name: crawler_flower
+    ports:
+      - "5555:5555"
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+    restart: unless-stopped
+    networks:
+      - crawler_network
+
+volumes:
+  redis_data:
+
+networks:
+  crawler_network:
+    driver: bridge 

@@ -5,6 +5,7 @@ import {useAuthStore} from '@/stores/auth'
 import {useRouter} from 'vue-router'
 import authHttp from "@/api/authHttp"
 import {ElMessage} from "element-plus"
+import axios from 'axios'
 const authStore=useAuthStore()
 const router=useRouter()
 let form =reactive({
@@ -15,64 +16,19 @@ const onSubmit=async ()=>{
     let pwdRgx=/^[0-9a-zA-Z_-]{6,20}/
     let emailRgx=/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9])+/
     if(!(emailRgx.test(form.email))){
-        //alert('邮箱格式不满足!')
         ElMessage.info('邮箱格式不满足!')
         return;}
     if(!(pwdRgx.test(form.password))){
-        //alert('密码格式不满足!')
         ElMessage.info('密码格式不满足!')
         return;}
-
-
-
-
-//axios
-//promise
-//配置： 设置超时时间
-//url :完整url
-
-//第一版 ：直接使用axios
-    //axios.post("http://127.0.0.1:8000/auth/login",{
-        //email:form.email,
-        //password:form.password}).then((res)=>{
-            //then:代表是成功的情况(在这里，代表返回的状态码是200)
-            //let data=res.data;
-            //let token = data.token;
-            //let user =data.user;
-            //authStore.setUserToken(user,token)
-            //跳转到oa系统的首页
-            //router.push({name:"frame"})
-            //}).catch((err)=>{
-                //catch:代表失败的情况(在这里，代表返回的状态码是非200
-                //let detail=err.response.data.detail;
-                //console.log(err);
-                //console.log(detail);})
-    //console.log(form.email)
-    //console.log(form.password)
-    //代码健壮性,第二版 ，对axios进行了一层封装
-    /* authHttp.login(form.email,form.password).then(res =>{
-      let data=res.data;
-      let token = data.token;
-      let user =data.user;
-      authStore.setUserToken(user,token)
-      //跳转到oa系统的首页
-      router.push({name:"frame"})
-      }).catch((err)=>{
-        //catch:代表失败的情况(在这里，代表返回的状态码是非200
-        let detail=err.response.data.detail;
-        alert(detail);
-    }) */
-    //第三版 ，改成了异步调用的方式
     try{
       let data=await authHttp.login(form.email,form.password)
       let token = data.token;
       let user =data.user;
       authStore.setUserToken(user,token)
-      //跳转到oa系统的首页
       router.push({name:"frame"})
-    }catch(detail){
-      //alert(detail)
-      ElMessage.error(detail)
+    }catch(err){
+      ElMessage.error('用户名或密码错误')
     }
 }
 </script>
@@ -120,9 +76,6 @@ const onSubmit=async ()=>{
     </div>
   </div>
 </template>
-
-<script setup name='login'>
-</script>
 
 <style scope src ='@/assets/css/login.css'></style>
 <style scope src ='@/assets/iconfont/iconfont.css'></style>

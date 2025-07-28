@@ -1,10 +1,13 @@
 import axios from "axios"
 import { useAuthStore } from "@/stores/auth";
+import { ElMessage } from "element-plus";
+import router from "@/router";
+
 class Http{
     constructor(){
         this.instance=axios.create({
             baseURL: import.meta.env.VITE_BASE_URL,
-            timeout: 6000
+            timeout: 60000
           });
           this.instance.interceptors.request.use((config)=>{
             const authStore =useAuthStore()
@@ -13,7 +16,25 @@ class Http{
                 config.headers.Authorization="JWT "+ token
             }
             
-            return config})
+            return config
+          })
+          
+          // 添加响应拦截器
+          this.instance.interceptors.response.use(
+            (response) => {
+              return response;
+            },
+            (error) => {
+              // 处理403错误（token过期）
+              if (error.response?.status === 403) {
+                const authStore = useAuthStore();
+                ElMessage.error('登录已过期，请重新登录');
+                authStore.clearUserToken();
+                router.push('/login');
+              }
+              return Promise.reject(error);
+            }
+          );
     }
     post(path,data){
         //path:/auth/login
@@ -31,8 +52,10 @@ class Http{
                 resolve(result.data);
             }catch(err){
                 //alert(err)
-                console.log(err)
-                let detail=err.response.data.detail;
+                console.log('请求出错:', err)
+                let detail = (err.response && err.response.data && err.response.data.detail)
+                    ? err.response.data.detail
+                    : (err.message || '未知错误');
                 //alert(detail);
                 reject(detail);
             }
@@ -45,7 +68,10 @@ class Http{
                 let result= await this.instance.get(path, params)
                 resolve(result.data);
             }catch(err){
-                let detail=err.response.data.detail;
+                console.log('请求出错:', err)
+                let detail = (err.response && err.response.data && err.response.data.detail)
+                    ? err.response.data.detail
+                    : (err.message || '未知错误');
                 //alert(detail);
                 reject(detail);
             }

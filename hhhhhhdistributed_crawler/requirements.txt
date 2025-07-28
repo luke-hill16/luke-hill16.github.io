@@ -1,0 +1,17 @@
+requests==2.31.0
+beautifulsoup4==4.12.2
+redis==5.0.1
+celery==5.3.4
+scrapy==2.11.0
+selenium==4.15.2
+aiohttp==3.9.1
+asyncio==3.4.3
+pymongo==4.6.0
+sqlalchemy==2.0.23
+pandas==2.1.4
+numpy==1.25.2
+lxml==4.9.3
+fake-useragent==1.4.0
+python-dotenv==1.0.0
+flask==3.0.0
+flask-cors==4.0.0 

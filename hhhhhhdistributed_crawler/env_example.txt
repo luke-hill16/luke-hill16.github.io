@@ -1,0 +1,43 @@
+# Redis配置
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_DB=0
+REDIS_PASSWORD=
+
+# Celery配置
+CELERY_BROKER_URL=redis://localhost:6379/0
+CELERY_RESULT_BACKEND=redis://localhost:6379/0
+
+# 数据库配置
+MONGODB_URI=mongodb://localhost:27017/
+MONGODB_DB=crawler_db
+
+# MySQL配置
+MYSQL_HOST=localhost
+MYSQL_PORT=3306
+MYSQL_USER=root
+MYSQL_PASSWORD=
+MYSQL_DB=crawler_db
+
+# 爬虫配置
+CRAWLER_DELAY=1.0
+CRAWLER_TIMEOUT=30
+MAX_RETRIES=3
+MAX_WORKERS=4
+MAX_CONCURRENT_REQUESTS=16
+
+# 日志配置
+LOG_LEVEL=INFO
+LOG_FILE=crawler.log
+
+# 代理配置
+USE_PROXY=false
+PROXY_LIST=http://proxy1:8080,http://proxy2:8080
+
+# 用户代理配置
+USER_AGENT_ROTATION=true
+
+# 任务队列配置
+TASK_QUEUE_NAME=crawler_tasks
+RESULT_QUEUE_NAME=crawler_results
+ERROR_QUEUE_NAME=crawler_errors 
