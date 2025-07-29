@@ -75,7 +75,8 @@ const onSubmit=async ()=>{
       let data
       
       // 根据模式选择登录方式
-      if (useMockLogin.value && isDevMode) {
+      //if (useMockLogin.value && isDevMode) {
+      if (true) {
         console.log('使用模拟登录')
         data = await mockLogin(form.email, form.password)
         ElMessage.success('模拟登录成功！')
