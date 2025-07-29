@@ -74,28 +74,28 @@ const onSubmit=async ()=>{
     try{
       let data
       
-      // 根据模式选择登录方式
-      //if (useMockLogin.value && isDevMode) {
-      if (true) {
-        console.log('使用模拟登录')
-        data = await mockLogin(form.email, form.password)
-        ElMessage.success('模拟登录成功！')
-      } else {
-        console.log('使用真实后端登录')
-        data = await authHttp.login(form.email, form.password)
-        ElMessage.success('登录成功！')
-      }
+      // 完全使用模拟登录
+      console.log('使用模拟登录')
+      data = await mockLogin(form.email, form.password)
+      ElMessage.success('模拟登录成功！')
+      
+      // 注释掉真实后端登录
+      // if (useMockLogin.value && isDevMode) {
+      //   console.log('使用模拟登录')
+      //   data = await mockLogin(form.email, form.password)
+      //   ElMessage.success('模拟登录成功！')
+      // } else {
+      //   console.log('使用真实后端登录')
+      //   data = await authHttp.login(form.email, form.password)
+      //   ElMessage.success('登录成功！')
+      // }
       
       let token = data.token;
       let user = data.user;
       authStore.setUserToken(user, token)
       router.push({name:"frame"})
     }catch(err){
-      if (useMockLogin.value && isDevMode) {
-        ElMessage.error('模拟登录失败')
-      } else {
-        ElMessage.error('用户名或密码错误')
-      }
+      ElMessage.error('模拟登录失败')
     }
 }
 
