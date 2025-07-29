@@ -12,7 +12,7 @@ const router=useRouter()
 
 // 默认测试账号
 const defaultCredentials = {
-  email: 'admin@qq.com',
+  email: 'admin',
   password: '123456'
 }
 

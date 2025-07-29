@@ -14,7 +14,7 @@ const getViteEnv = (mode, target) => {
 // https://vitejs.dev/config/
 export default ({mode})=>{
   return defineConfig({
-    base: '/',
+    base: './', // 改为相对路径，解决 GitHub Pages 资源加载问题
     plugins: [
       vue(),
       VueDevTools(),
