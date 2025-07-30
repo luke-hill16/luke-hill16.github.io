@@ -12,6 +12,23 @@ const router = createRouter({
       path: '/',
       name: 'frame',
       component: frame,
+      // 添加自动登录逻辑
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore()
+        if (!authStore.is_logined) {
+          // 自动设置模拟登录
+          const mockUser = {
+            id: 1,
+            email: 'admin@qq.com',
+            username: 'admin',
+            name: '测试用户',
+            role: 'admin'
+          }
+          const mockToken = 'mock-token-' + Date.now()
+          authStore.setUserToken(mockUser, mockToken)
+        }
+        next()
+      },
       children:[
         {
           path: '',  // 添加这个空路径作为默认首页
@@ -47,9 +64,22 @@ const router = createRouter({
 //导航守卫
 router.beforeEach((to,from)=>{
  //判断用户是否登录，如果还没有登录，并且访问的页面不是登录页面， 那么就要跳转到登录页面
- const authStore =useAuthStore()
+ const authStore = useAuthStore()
+ 
+ // 自动模拟登录（临时方案）
  if (!authStore.is_logined && to.name != 'login'){
-  return {name:'login'}
+   // 自动设置模拟登录状态
+   //return {name:'login'}
+   const mockUser = {
+     id: 1,
+     email: 'admin@qq.com',
+     username: 'admin',
+     name: '测试用户',
+     role: 'admin'
+   }
+   const mockToken = 'mock-token-' + Date.now()
+   authStore.setUserToken(mockUser, mockToken)
+   console.log('自动模拟登录成功')
  }
 })
 
