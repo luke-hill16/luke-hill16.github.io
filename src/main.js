@@ -2,10 +2,10 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
-import ElementPlus from 'element-plus';
-import 'element-plus/dist/index.css';
+// 不再 import 'element-plus'，因为已用 CDN
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
+
 const app = createApp(App)
 
 // 添加全局错误处理
@@ -26,8 +26,7 @@ app.config.warnHandler = (msg, vm, trace) => {
 
 app.use(createPinia())
 app.use(router)
-app.use(ElementPlus, {
-    locale: zhCn,});
+app.use(ElementPlus, { locale: zhCn })
 //icon
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)

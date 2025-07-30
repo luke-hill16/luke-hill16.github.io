@@ -35,17 +35,14 @@ export default ({mode})=>{
     },
     build: {
       rollupOptions: {
+        external: [
+          'vue',
+          'element-plus'
+        ],
         output: {
-          manualChunks: (id) => {
-            if (id.includes('vue') || id.includes('pinia') || id.includes('vue-router') || id.includes('element-plus')) {
-              return 'vue-element-vendor';
-            }
-            if (id.includes('axios')) {
-              return 'axios';
-            }
-            if (id.includes('node_modules')) {
-              return 'vendor';
-            }
+          globals: {
+            vue: 'Vue',
+            'element-plus': 'ElementPlus'
           }
         }
       },
