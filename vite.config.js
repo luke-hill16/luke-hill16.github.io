@@ -14,7 +14,7 @@ const getViteEnv = (mode, target) => {
 // https://vitejs.dev/config/
 export default ({mode})=>{
   return defineConfig({
-    base: './', // 改为相对路径，解决 GitHub Pages 资源加载问题
+    base: './',
     plugins: [
       vue(),
       VueDevTools(),
@@ -35,31 +35,44 @@ export default ({mode})=>{
     build: {
       rollupOptions: {
         output: {
-          manualChunks: {
-            // 分离 Vue 核心库
-            'vue-vendor': ['vue', 'vue-router', 'pinia'],
+          manualChunks: (id) => {
+            // 分离 Vue 相关
+            if (id.includes('vue') || id.includes('pinia') || id.includes('vue-router')) {
+              return 'vue-vendor';
+            }
             // 分离 Element Plus
-            'element-plus': ['element-plus']
+            if (id.includes('element-plus')) {
+              return 'element-plus';
+            }
+            // 分离 axios
+            if (id.includes('axios')) {
+              return 'axios';
+            }
+            // 分离其他大型依赖
+            if (id.includes('node_modules')) {
+              return 'vendor';
+            }
           }
         }
       },
-      // 启用 gzip 压缩
+      // 启用压缩
       minify: 'terser',
       terserOptions: {
         compress: {
-          drop_console: true
+          drop_console: true,
+          drop_debugger: true
         }
-      }
+      },
+      // 设置块大小警告阈值
+      chunkSizeWarningLimit: 500
     },
     server: {
       proxy: {
         '/api': {
-          target: 'http://127.0.0.1:8000', // Django 后端地址
+          target: 'http://127.0.0.1:8000',
           changeOrigin: true,
         }
       }
     }
   })
-  
-  
 }
