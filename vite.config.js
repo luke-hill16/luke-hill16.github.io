@@ -33,38 +33,19 @@ export default ({mode})=>{
       }
     },
     build: {
+      // 禁用代码分割
       rollupOptions: {
         output: {
-          manualChunks: (id) => {
-            // 分离 Vue 相关
-            if (id.includes('vue') || id.includes('pinia') || id.includes('vue-router')) {
-              return 'vue-vendor';
-            }
-            // 分离 Element Plus
-            if (id.includes('element-plus')) {
-              return 'element-plus';
-            }
-            // 分离 axios
-            if (id.includes('axios')) {
-              return 'axios';
-            }
-            // 分离其他大型依赖
-            if (id.includes('node_modules')) {
-              return 'vendor';
-            }
-          }
+          manualChunks: undefined
         }
       },
-      // 启用压缩
       minify: 'terser',
       terserOptions: {
         compress: {
           drop_console: true,
           drop_debugger: true
         }
-      },
-      // 设置块大小警告阈值
-      chunkSizeWarningLimit: 500
+      }
     },
     server: {
       proxy: {
