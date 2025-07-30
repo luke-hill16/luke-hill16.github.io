@@ -17,7 +17,8 @@ export default ({mode})=>{
     base: './',
     plugins: [
       vue(),
-      VueDevTools(),
+      // 临时注释掉 Vue DevTools
+      // VueDevTools(),
       VueSetupExtend(),
       createHtmlPlugin({
         inject: {
@@ -33,10 +34,19 @@ export default ({mode})=>{
       }
     },
     build: {
-      // 禁用代码分割
       rollupOptions: {
         output: {
-          manualChunks: undefined
+          manualChunks: (id) => {
+            if (id.includes('vue') || id.includes('pinia') || id.includes('vue-router') || id.includes('element-plus')) {
+              return 'vue-element-vendor';
+            }
+            if (id.includes('axios')) {
+              return 'axios';
+            }
+            if (id.includes('node_modules')) {
+              return 'vendor';
+            }
+          }
         }
       },
       minify: 'terser',
