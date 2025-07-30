@@ -62,25 +62,25 @@ const router = createRouter({
   ]
 })
 //导航守卫
-router.beforeEach((to,from)=>{
- //判断用户是否登录，如果还没有登录，并且访问的页面不是登录页面， 那么就要跳转到登录页面
- const authStore = useAuthStore()
+// router.beforeEach((to,from)=>{
+//  //判断用户是否登录，如果还没有登录，并且访问的页面不是登录页面， 那么就要跳转到登录页面
+//  const authStore = useAuthStore()
  
- // 自动模拟登录（临时方案）
- if (!authStore.is_logined && to.name != 'login'){
-   // 自动设置模拟登录状态
-   //return {name:'login'}
-   const mockUser = {
-     id: 1,
-     email: 'admin@qq.com',
-     username: 'admin',
-     name: '测试用户',
-     role: 'admin'
-   }
-   const mockToken = 'mock-token-' + Date.now()
-   authStore.setUserToken(mockUser, mockToken)
-   console.log('自动模拟登录成功')
- }
-})
+//  // 自动模拟登录（临时方案）
+//  if (!authStore.is_logined && to.name != 'login'){
+//    // 自动设置模拟登录状态
+//    //return {name:'login'}
+//    const mockUser = {
+//      id: 1,
+//      email: 'admin@qq.com',
+//      username: 'admin',
+//      name: '测试用户',
+//      role: 'admin'
+//    }
+//    const mockToken = 'mock-token-' + Date.now()
+//    authStore.setUserToken(mockUser, mockToken)
+//    console.log('自动模拟登录成功')
+//  }
+// })
 
 export default router
