@@ -32,6 +32,25 @@ export default ({mode})=>{
         '@': fileURLToPath(new URL('./src', import.meta.url))
       }
     },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            // 分离 Vue 核心库
+            'vue-vendor': ['vue', 'vue-router', 'pinia'],
+            // 分离 Element Plus
+            'element-plus': ['element-plus']
+          }
+        }
+      },
+      // 启用 gzip 压缩
+      minify: 'terser',
+      terserOptions: {
+        compress: {
+          drop_console: true
+        }
+      }
+    },
     server: {
       proxy: {
         '/api': {
