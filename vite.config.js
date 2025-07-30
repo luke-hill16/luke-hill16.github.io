@@ -33,24 +33,14 @@ export default ({mode})=>{
         '@': fileURLToPath(new URL('./src', import.meta.url))
       }
     },
+    // 暂时移除 external 配置
     build: {
       rollupOptions: {
-        external: [
-          'vue',
-          'element-plus'
-        ],
         output: {
-          globals: {
-            vue: 'Vue',
-            'element-plus': 'ElementPlus'
+          manualChunks: {
+            'vue-vendor': ['vue', 'vue-router', 'pinia'],
+            'element-plus': ['element-plus']
           }
-        }
-      },
-      minify: 'terser',
-      terserOptions: {
-        compress: {
-          drop_console: true,
-          drop_debugger: true
         }
       }
     },
