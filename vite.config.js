@@ -39,7 +39,14 @@ export default ({mode})=>{
           manualChunks: {
             'vue-vendor': ['vue', 'vue-router', 'pinia'],
             'element-plus': ['element-plus']
-          }
+          },
+          // 自定义文件名格式，避免下划线
+          chunkFileNames: (chunkInfo) => {
+            const facadeModuleId = chunkInfo.facadeModuleId ? chunkInfo.facadeModuleId.split('/').pop() : 'chunk';
+            return `assets/${facadeModuleId.replace(/\.(vue|js|ts)$/, '')}-[hash].js`;
+          },
+          entryFileNames: 'assets/[name]-[hash].js',
+          assetFileNames: 'assets/[name]-[hash].[ext]'
         }
       }
     },
