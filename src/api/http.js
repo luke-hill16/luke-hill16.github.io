@@ -5,8 +5,13 @@ import router from "@/router";
 
 class Http{
     constructor(){
+        // 根据环境设置不同的base URL
+        const baseURL = import.meta.env.PROD 
+          ? 'https://luke-hill16.github.io/api'  // 生产环境
+          : 'http://127.0.0.1:8000';  // 开发环境
+        
         this.instance=axios.create({
-            baseURL: import.meta.env.VITE_BASE_URL,
+            baseURL: baseURL,
             timeout: 60000
           });
           this.instance.interceptors.request.use((config)=>{

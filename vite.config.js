@@ -14,16 +14,15 @@ const getViteEnv = (mode, target) => {
 // https://vitejs.dev/config/
 export default ({mode})=>{
   return defineConfig({
-    base: './',
+    // 根据环境设置不同的base路径
+    base: mode === 'production' ? '/' : './',
     plugins: [
       vue(),
-      // 临时注释掉 Vue DevTools
-      // VueDevTools(),
       VueSetupExtend(),
       createHtmlPlugin({
         inject: {
           data: {
-            title: getViteEnv(mode, "VITE_APP_TITLE"),
+            title: getViteEnv(mode, "VITE_APP_TITLE") || "知了oa系统",
           },
         },
       }),
