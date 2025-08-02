@@ -52,6 +52,8 @@
           <el-menu-item :index="'language'" :route="{ name: 'language' }"><el-icon><Monitor /></el-icon>语言管理</el-menu-item>
           <el-menu-item :index="'district'" :route="{ name: 'district' }"><el-icon><Location /></el-icon>区县管理</el-menu-item>
           <el-menu-item :index="'traffic'" :route="{ name: 'traffic' }"><el-icon><Location /></el-icon>交通管理</el-menu-item>
+          <el-menu-item :index="'enterprise-planning'" :route="{ name: 'enterprise-planning' }"><el-icon><OfficeBuilding /></el-icon>企业规划</el-menu-item>
+          <el-menu-item :index="'govenment'" :route="{ name: 'govenment' }"><el-icon><Location /></el-icon>政策管理</el-menu-item>
         </el-sub-menu>
         <el-sub-menu index="16">
           <template #title>

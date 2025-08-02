@@ -28,9 +28,11 @@ const router = createRouter({
         {path:'/language',name:'language',component:() => import('@/views/main/language.vue')},
         {path:'/district',name:'district',component:() => import('@/views/main/dihestrict.vue')},
         {path:'/traffic',name:'traffic',component:() => import('@/views/main/traffic.vue')},
+        {path:'/enterprise-planning',name:'enterprise-planning',component:() => import('@/views/main/enterprise-planning.vue')},
         {path:'/industry',name:'industry',component:() => import('@/views/main/industry.vue')},
         {path:'/education',name:'education',component:() => import('@/views/main/education.vue')},
         {path:'/enterprise',name:'enterprise',component:() => import('@/views/main/enterprise.vue')},
+        {path:'/govenment',name:'govenment',component:() => import('@/views/main/govenment.vue')},
       ]
     },
     {
